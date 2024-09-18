@@ -18,10 +18,9 @@ class SendOtpUsecase implements BaseUseCase<DummyGetOtpDtoEntity, SendOTPParams>
 
 class SendOTPParams {
   final String phoneNumber;
-  final String otpType;
 
   SendOTPParams({
     required this.phoneNumber,
-    required this.otpType,
+
   });
 }

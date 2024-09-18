@@ -6,6 +6,8 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:clean_flutter/features/dashboard/data/dataSource/remote/dummy_d_t_o_entity.dart';
 import 'package:clean_flutter/features/dashboard/data/dataSource/remote/dummy_get_otp_dto_entity.dart';
+import 'package:clean_flutter/features/dashboard/data/dataSource/remote/dummy_verify_otp_d_t_o_entity.dart';
+import 'package:clean_flutter/features/dashboard/data/dataSource/remote/user_model_d_t_o_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 
@@ -155,6 +157,18 @@ class JsonConvert {
       return data.map<DummyGetOtpDtoData>((Map<String, dynamic> e) =>
           DummyGetOtpDtoData.fromJson(e)).toList() as M;
     }
+    if (<DummyVerifyOtpDTOEntity>[] is M) {
+      return data.map<DummyVerifyOtpDTOEntity>((Map<String, dynamic> e) =>
+          DummyVerifyOtpDTOEntity.fromJson(e)).toList() as M;
+    }
+    if (<UserModelDTOEntity>[] is M) {
+      return data.map<UserModelDTOEntity>((Map<String, dynamic> e) =>
+          UserModelDTOEntity.fromJson(e)).toList() as M;
+    }
+    if (<UserModelDTOData>[] is M) {
+      return data.map<UserModelDTOData>((Map<String, dynamic> e) =>
+          UserModelDTOData.fromJson(e)).toList() as M;
+    }
 
     debugPrint("$M not found");
 
@@ -179,6 +193,9 @@ class JsonConvertClassCollection {
     (DummyDTOEntity).toString(): DummyDTOEntity.fromJson,
     (DummyGetOtpDtoEntity).toString(): DummyGetOtpDtoEntity.fromJson,
     (DummyGetOtpDtoData).toString(): DummyGetOtpDtoData.fromJson,
+    (DummyVerifyOtpDTOEntity).toString(): DummyVerifyOtpDTOEntity.fromJson,
+    (UserModelDTOEntity).toString(): UserModelDTOEntity.fromJson,
+    (UserModelDTOData).toString(): UserModelDTOData.fromJson,
   };
 
   bool containsKey(String type) {

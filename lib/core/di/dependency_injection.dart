@@ -1,4 +1,8 @@
+import 'package:clean_flutter/features/dashboard/data/repository/user_data_repository.dart';
 import 'package:clean_flutter/features/dashboard/domain/usecase/send_otp_usecase.dart';
+import 'package:clean_flutter/features/dashboard/domain/usecase/user_usecase.dart';
+import 'package:clean_flutter/features/dashboard/domain/usecase/verify_otp_usecase.dart';
+import 'package:clean_flutter/features/dashboard/presentation/home_viewModel.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/dashboard/data/repository/databoard_data_repository.dart';
@@ -16,7 +20,8 @@ class DependencyInjection {
   static Future<void> init() async {
     // Initialize SharedPreferences
     final sharedPreferences = await SharedPreferences.getInstance();
-    final sharedPreferencesHelper = SharedPreferencesHelper(Future.value(sharedPreferences));
+    final sharedPreferencesHelper =
+        SharedPreferencesHelper(Future.value(sharedPreferences));
 
     // Register dependencies
     Get.lazyPut(() => sharedPreferencesHelper);
@@ -31,20 +36,33 @@ class DependencyInjection {
 
     // API Service
     Get.lazyPut(() => ApiService(
-      Get.find<http.Client>(),
-      Get.find<NetworkInfo>(),
-      Get.find<TimeoutInterceptor>(),
-      Get.find<Interceptor>(),
-    ));
+          Get.find<http.Client>(),
+          Get.find<NetworkInfo>(),
+          Get.find<TimeoutInterceptor>(),
+          Get.find<Interceptor>(),
+        ));
 
     // Repositories
     Get.lazyPut(() => DashboardDataRepository(Get.find<ApiService>()));
+    Get.lazyPut(() => UserDataRepository(Get.find<ApiService>()));
 
     // Use Cases
     Get.lazyPut(() => DashboardUseCase(Get.find<DashboardDataRepository>()));
     Get.lazyPut(() => SendOtpUsecase(Get.find<DashboardDataRepository>()));
+    Get.lazyPut(() => VerifyOtpUsecase(Get.find<DashboardDataRepository>()));
+
+    Get.lazyPut(() => UserUsecase(Get.find<UserDataRepository>()));
 
     // ViewModels
-    Get.lazyPut(() => DashboardViewModel(Get.find<DashboardUseCase>(),Get.find<SendOtpUsecase>()));
+    Get.lazyPut(() => DashboardViewModel(
+        Get.find<DashboardUseCase>(),
+        Get.find<SendOtpUsecase>(),
+        Get.find<VerifyOtpUsecase>(),
+        Get.find<SharedPreferencesHelper>()));
+
+    Get.lazyPut(() => HomeViewModel(
+        Get.find<UserUsecase>()));
   }
+
+
 }
