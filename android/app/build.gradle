@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.thesua7.base.clean_flutter"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
