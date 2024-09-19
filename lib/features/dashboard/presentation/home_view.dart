@@ -43,27 +43,36 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
-      body: Center(
-        child: Consumer<HomeViewModel>(
-          builder: (context, viewModel, child) {
-            final uiState = viewModel.uiState;
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () =>
+               Get.offNamed('/jobs'),
+            child: Text('GOTO jobs'),
+          ),
+          Center(
+            child: Consumer<HomeViewModel>(
+              builder: (context, viewModel, child) {
+                final uiState = viewModel.uiState;
 
-            if (uiState.status == UiStateStatus.loading) {
-              return const CircularProgressIndicator();
-            } else if (uiState.status == UiStateStatus.success) {
-              if (uiState.data is UserModelDTOEntity) {
-                final userModel = uiState.data as UserModelDTOEntity;
-                return Text(userModel.toString());
-              } else {
-                return const Text('Unexpected data type');
-              }
-            } else if (uiState.status == UiStateStatus.error) {
-              return Text('Error: ${uiState.errorMessage}');
-            } else {
-              return const Text('No data available');
-            }
-          },
-        ),
+                if (uiState.status == UiStateStatus.loading) {
+                  return const CircularProgressIndicator();
+                } else if (uiState.status == UiStateStatus.success) {
+                  if (uiState.data is UserModelDTOEntity) {
+                    final userModel = uiState.data as UserModelDTOEntity;
+                    return Text(userModel.toString());
+                  } else {
+                    return const Text('Unexpected data type');
+                  }
+                } else if (uiState.status == UiStateStatus.error) {
+                  return Text('Error: ${uiState.errorMessage}');
+                } else {
+                  return const Text('No data available');
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

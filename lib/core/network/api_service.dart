@@ -64,6 +64,9 @@ class ApiService {
 
   http.Response _handleResponse(http.Response response) {
     if (response.statusCode >= 400 && response.statusCode < 500) {
+      if(response.statusCode == 401){
+        //session time out || logout dialog
+      }
       throw NetworkException('Client error: ${response.reasonPhrase}', response.statusCode);
     } else if (response.statusCode >= 500) {
       throw NetworkException('Server error: ${response.reasonPhrase}', response.statusCode);

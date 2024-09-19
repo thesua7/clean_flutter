@@ -3,6 +3,9 @@ import 'package:clean_flutter/features/dashboard/domain/usecase/send_otp_usecase
 import 'package:clean_flutter/features/dashboard/domain/usecase/user_usecase.dart';
 import 'package:clean_flutter/features/dashboard/domain/usecase/verify_otp_usecase.dart';
 import 'package:clean_flutter/features/dashboard/presentation/home_viewModel.dart';
+import 'package:clean_flutter/features/jobs/data/repository/JobsDataRepository.dart';
+import 'package:clean_flutter/features/jobs/domain/usecase/get_jobs_usecase.dart';
+import 'package:clean_flutter/features/jobs/presentation/JobsViewModel.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/dashboard/data/repository/databoard_data_repository.dart';
@@ -45,6 +48,7 @@ class DependencyInjection {
     // Repositories
     Get.lazyPut(() => DashboardDataRepository(Get.find<ApiService>()));
     Get.lazyPut(() => UserDataRepository(Get.find<ApiService>()));
+    Get.lazyPut(() => JobsDataRepository(Get.find<ApiService>()));
 
     // Use Cases
     Get.lazyPut(() => DashboardUseCase(Get.find<DashboardDataRepository>()));
@@ -52,6 +56,7 @@ class DependencyInjection {
     Get.lazyPut(() => VerifyOtpUsecase(Get.find<DashboardDataRepository>()));
 
     Get.lazyPut(() => UserUsecase(Get.find<UserDataRepository>()));
+    Get.lazyPut(() => GetJobsUsecase(Get.find<JobsDataRepository>()));
 
     // ViewModels
     Get.lazyPut(() => DashboardViewModel(
@@ -62,6 +67,9 @@ class DependencyInjection {
 
     Get.lazyPut(() => HomeViewModel(
         Get.find<UserUsecase>()));
+
+    Get.lazyPut(() => Jobsviewmodel(
+        Get.find<GetJobsUsecase>()));
   }
 
 

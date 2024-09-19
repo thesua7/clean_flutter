@@ -8,6 +8,7 @@ import 'package:clean_flutter/features/dashboard/data/dataSource/remote/dummy_d_
 import 'package:clean_flutter/features/dashboard/data/dataSource/remote/dummy_get_otp_dto_entity.dart';
 import 'package:clean_flutter/features/dashboard/data/dataSource/remote/dummy_verify_otp_d_t_o_entity.dart';
 import 'package:clean_flutter/features/dashboard/data/dataSource/remote/user_model_d_t_o_entity.dart';
+import 'package:clean_flutter/features/jobs/data/data_source/remote/jobs_model_d_t_o_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 
@@ -169,6 +170,18 @@ class JsonConvert {
       return data.map<UserModelDTOData>((Map<String, dynamic> e) =>
           UserModelDTOData.fromJson(e)).toList() as M;
     }
+    if (<JobsModelDTOEntity>[] is M) {
+      return data.map<JobsModelDTOEntity>((Map<String, dynamic> e) =>
+          JobsModelDTOEntity.fromJson(e)).toList() as M;
+    }
+    if (<JobsModelDTOData>[] is M) {
+      return data.map<JobsModelDTOData>((Map<String, dynamic> e) =>
+          JobsModelDTOData.fromJson(e)).toList() as M;
+    }
+    if (<JobsModelDTODataCompanyLogo>[] is M) {
+      return data.map<JobsModelDTODataCompanyLogo>((Map<String, dynamic> e) =>
+          JobsModelDTODataCompanyLogo.fromJson(e)).toList() as M;
+    }
 
     debugPrint("$M not found");
 
@@ -196,6 +209,10 @@ class JsonConvertClassCollection {
     (DummyVerifyOtpDTOEntity).toString(): DummyVerifyOtpDTOEntity.fromJson,
     (UserModelDTOEntity).toString(): UserModelDTOEntity.fromJson,
     (UserModelDTOData).toString(): UserModelDTOData.fromJson,
+    (JobsModelDTOEntity).toString(): JobsModelDTOEntity.fromJson,
+    (JobsModelDTOData).toString(): JobsModelDTOData.fromJson,
+    (JobsModelDTODataCompanyLogo).toString(): JobsModelDTODataCompanyLogo
+        .fromJson,
   };
 
   bool containsKey(String type) {
