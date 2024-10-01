@@ -6,6 +6,7 @@ import '../data/dataSource/remote/dummy_d_t_o_entity.dart';
 import '../data/dataSource/remote/dummy_get_otp_dto_entity.dart';
 import '../data/dataSource/remote/dummy_verify_otp_d_t_o_entity.dart';
 import 'dashboard_viewmodel.dart';
+import '../../../core/theme/theme_provider.dart'; // Import the ThemeProvider
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -17,15 +18,29 @@ class DashboardScreen extends StatelessWidget {
     final TextEditingController inputBoxVerify = TextEditingController();
     int uid = -1;
 
+    final Color primaryColor = Theme.of(context).colorScheme.primary; // Get primary color from theme
+    final Color surfaceColor = Theme.of(context).colorScheme.surface; // Get surface color from theme
+    final Color errorColor = Colors.red; // Define error color directly
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.brightness_6),
+            onPressed: () {
+              // Toggle theme when the button is pressed
+              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
           Container(
             height: 100,
-            color: Colors.blueAccent,
+            color: surfaceColor, // Use surface color for the container
             child: Center(
               child: Consumer<DashboardViewModel>(
                 builder: (context, viewModel, child) {
@@ -36,22 +51,21 @@ class DashboardScreen extends StatelessWidget {
                   } else if (uiState.status == UiStateStatus.success) {
                     if (uiState.data is DummyDTOEntity) {
                       final data = uiState.data as DummyDTOEntity;
-                      return Text('Data: ${data.title}');
+                      return Text('Data: ${data.title}', style: TextStyle(color: Colors.white));
                     } else if (uiState.data is DummyGetOtpDtoEntity) {
                       final otpData = uiState.data as DummyGetOtpDtoEntity;
                       uid = otpData.data!.id!;
-                      return Text('OTP Data: ${otpData.toString()}');
+                      return Text('OTP Data: ${otpData.toString()}', style: TextStyle(color: Colors.white));
                     } else if (uiState.data is DummyVerifyOtpDTOEntity) {
                       final verifyOtp = uiState.data as DummyVerifyOtpDTOEntity;
-                      // Handle successful OTP verification if needed
-                      return Text('OTP Data: ${verifyOtp.toString()}');
+                      return Text('OTP Data: ${verifyOtp.toString()}', style: TextStyle(color: Colors.white));
                     } else {
-                      return const Text('Unknown data type');
+                      return const Text('Unknown data type', style: TextStyle(color: Colors.white));
                     }
                   } else if (uiState.status == UiStateStatus.error) {
-                    return Text('Error: ${uiState.errorMessage}');
+                    return Text('Error: ${uiState.errorMessage}', style: TextStyle(color: errorColor));
                   } else {
-                    return const Text('Welcome to Dashboard!');
+                    return const Text('Welcome to Dashboard!', style: TextStyle(color: Colors.white));
                   }
                 },
               ),
@@ -63,30 +77,36 @@ class DashboardScreen extends StatelessWidget {
             decoration: InputDecoration(
               labelText: 'Enter text',
               border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: primaryColor), // Use primary color for focused border
+              ),
             ),
           ),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () => viewModel.sendOTP(inputBox.text),
-            child: Text('Send OTP'),
+            child: const Text('Send OTP'),
           ),
           TextField(
             controller: inputBoxVerify,
             decoration: InputDecoration(
               labelText: 'Verify OTP',
               border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: primaryColor), // Use primary color for focused border
+              ),
             ),
           ),
           SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () =>
-                _verifyOTP(uid.toString(), inputBoxVerify.text, viewModel),
-            child: Text('Verify OTP'),
+            onPressed: () => _verifyOTP(uid.toString(), inputBoxVerify.text, viewModel),
+            child: const Text('Verify OTP'),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => viewModel.fetchDashboardData(),
+        backgroundColor: primaryColor, // Use primary color for FAB
         child: const Icon(Icons.read_more),
       ),
     );
@@ -101,8 +121,7 @@ class DashboardScreen extends StatelessWidget {
       if (verifyOtp.message == "successfully logged in") {
         // Navigate to the logout page
         Get.offAllNamed('/home');
-      }
-      else{
+      } else {
         throw verifyOtp.message!;
       }
     }).catchError((error) {
